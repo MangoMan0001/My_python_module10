@@ -7,6 +7,9 @@ def spell_combiner(spell1: callable, spell2: callable) -> callable:
     二つの引数で渡された関数を使う関数を作成して返す
     """
 
+    if not callable(spell1) or not callable(spell2):
+        raise TypeError("arg must be callable")
+
     return lambda: (spell1(), spell2())
 
 
@@ -14,6 +17,9 @@ def power_amplifier(base_spell: callable, multiplier: int) -> callable:
     """
     base_spell実行時に返ってきた値にmaltiplierを乗算する関数を返す
     """
+
+    if not callable(base_spell):
+        raise TypeError("arg must be callable")
 
     return lambda: base_spell() * multiplier
 
@@ -24,6 +30,9 @@ def conditional_caster(condition: callable, spell: callable) -> callable:
     作成された関数は引数を持ち、conditonとspell実行時に引数に渡す
     """
 
+    if not callable(condition) or not callable(spell):
+        raise TypeError("arg must be callable")
+
     return (lambda target: spell(target)
             if condition(target) else "Spell fizzled")
 
@@ -33,6 +42,10 @@ def spell_sequence(spells: list[callable]) -> callable:
     リスト化された関数を順に実行する。
     作成された関数は引数を持ち、各関数実行時に引数に渡す
     """
+
+    for spell in spells:
+        if not callable(spell):
+            raise TypeError("arg must be callable")
 
     return lambda value: [spell(value) for spell in spells]
 

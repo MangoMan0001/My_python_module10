@@ -53,8 +53,6 @@ def enchantment_factory(enchantment_type: str) -> callable:
         target_itemにクロージャで記憶されたされたe_typeエンチャントを適用して返す
         """
 
-        nonlocal e_type
-
         return f"{e_type} {target_item}"
 
     return nest_enchantment
@@ -73,7 +71,6 @@ def memory_vault() -> dict[str, callable]:
         keyとvalueをmemory: dictに設定する
         """
 
-        nonlocal memory
         memory[key] = value
 
     def recall(key: str) -> str:
@@ -82,7 +79,6 @@ def memory_vault() -> dict[str, callable]:
         なければ"Memory not found"を返す。
         """
 
-        nonlocal memory
         try:
             value = memory[key]
         except KeyError:
