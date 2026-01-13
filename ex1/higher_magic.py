@@ -24,7 +24,8 @@ def conditional_caster(condition: callable, spell: callable) -> callable:
     作成された関数は引数を持ち、conditonとspell実行時に引数に渡す
     """
 
-    return lambda target: spell(target) if condition(target) else  "Spell fizzled"
+    return (lambda target: spell(target)
+            if condition(target) else "Spell fizzled")
 
 
 def spell_sequence(spells: list[callable]) -> callable:
@@ -52,7 +53,8 @@ def main() -> None:
 
     # 1.spell_combinerを実行
     print("Testing spell_combiner...")
-    result = spell_combiner(lambda: "Fireball hits Dragon", lambda: " Heals Dragon")
+    result = spell_combiner(lambda: "Fireball hits Dragon",
+                            lambda: " Heals Dragon")
     print(result())
     print()
 
@@ -64,7 +66,8 @@ def main() -> None:
 
     # 3.conditional_casterを実行
     print("Testing conditional_caster...")
-    result = conditional_caster(lambda target: True if target != "Dragon" else False,
+    result = conditional_caster(lambda target: True
+                                if target != "Dragon" else False,
                                 lambda target: "Fire ball" if target else None)
     print(result(random.choice(test_targets)))
     print()
@@ -78,4 +81,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

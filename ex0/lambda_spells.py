@@ -37,7 +37,8 @@ def mage_stats(mages: list[dict]) -> dict:
 
     return {'max_power': super_mage['power'],
             'min_power': noob_mage['power'],
-            'avg_power': round(sum(map(lambda mage: mage['power'], mages)) / len(mages), 2)}
+            'avg_power': round(sum(map(lambda mage: mage['power'], mages))
+                               / len(mages), 2)}
 
 
 def main() -> None:
@@ -66,7 +67,7 @@ def main() -> None:
 
     # 2.power_filterを実行
     print("Testing power_filter...")
-    print(power_filter(mages,80))
+    print(power_filter(mages, 80))
     print()
 
     # 3.spell_transformerを実行
@@ -78,6 +79,7 @@ def main() -> None:
     print("Testing mage_stats...")
     print(mage_stats(mages))
     print()
+
 
 if __name__ == "__main__":
     main()

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import random
 import operator
 import functools
 
@@ -114,7 +113,7 @@ def main() -> None:
 
     # 2.partial_enchanterを実行
     result = partial_enchanter(lambda power, element, target:
-                                f"{element} -> {target} ({power})")
+                               f"{element} -> {target} ({power})")
     elements = []
     elements.append(result['fire_enchant'])
     elements.append(result['ice_enchant'])
@@ -125,10 +124,9 @@ def main() -> None:
     print()
 
     # 3.memoized_fibonacciを実行
-    n = 10
-
     print("Testing memoized_fibonacci...")
-    print(f"({n}): {memoized_fibonacci(n)}")
+    for fi in fibonacci_tests:
+        print(f"case{fi}: {memoized_fibonacci(fi)}")
     print()
 
     # 4.spell_dispatcherを実行
@@ -140,6 +138,7 @@ def main() -> None:
     print(result('Fire ball'))
     print(result(['Fire ball', 'Ice age']))
     print()
+
 
 if __name__ == "__main__":
     main()
