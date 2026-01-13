@@ -60,25 +60,29 @@ def main() -> None:
     print("========lambda_spells.py========")
     print()
 
-    # 1.aritifact_srterを実行
-    print("Testing artifact sorter...")
-    print(artifact_sorter(artifacts))
-    print()
+    try:
+        # 1.aritifact_srterを実行
+        print("Testing artifact sorter...")
+        print(artifact_sorter(artifacts))
+        print()
 
-    # 2.power_filterを実行
-    print("Testing power_filter...")
-    print(power_filter(mages, 80))
-    print()
+        # 2.power_filterを実行
+        print("Testing power_filter...")
+        print(power_filter(mages, 80))
+        print()
 
-    # 3.spell_transformerを実行
-    print("Testing spell_transformer...")
-    print(spell_transformer(spells))
-    print()
+        # 3.spell_transformerを実行
+        print("Testing spell_transformer...")
+        print(spell_transformer(spells))
+        print()
 
-    # 4.mage_statsを実行
-    print("Testing mage_stats...")
-    print(mage_stats(mages))
-    print()
+        # 4.mage_statsを実行
+        print("Testing mage_stats...")
+        print(mage_stats(mages))
+        print()
+
+    except Exception as e:
+        print(e)
 
 
 if __name__ == "__main__":

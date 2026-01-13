@@ -26,6 +26,9 @@ def partial_enchanter(base_enchantment: callable) -> dict[str, callable]:
      ’fire_enchant’, ’ice_enchant’, ’lightning_enchant’の3つを作成し、powerは50で固定
     """
 
+    if not callable(base_enchantment):
+        raise TypeError("arg must be callable")
+
     return {'fire_enchant':
             functools.partial(base_enchantment, power=50, element='fire'),
             'ice_enchant':
@@ -105,39 +108,42 @@ def main() -> None:
     print("========functools_artifacts.py========")
     print()
 
-    # 1.spell_reducerを実行
-    print("Testing spell_reducer...")
-    for op in operations:
-        print(f"{op}: {spell_reducer(spell_powers, op)}")
-    print()
+    try:
+        # 1.spell_reducerを実行
+        print("Testing spell_reducer...")
+        for op in operations:
+            print(f"{op}: {spell_reducer(spell_powers, op)}")
+        print()
 
-    # 2.partial_enchanterを実行
-    result = partial_enchanter(lambda power, element, target:
-                               f"{element} -> {target} ({power})")
-    elements = []
-    elements.append(result['fire_enchant'])
-    elements.append(result['ice_enchant'])
-    elements.append(result['lightning_enchant'])
-    print("Testing partial_enchanter...")
-    for element in elements:
-        print(element(target='enemy'))
-    print()
+        # 2.partial_enchanterを実行
+        result = partial_enchanter(lambda power, element, target:
+                                   f"{element} -> {target} ({power})")
+        elements = []
+        elements.append(result['fire_enchant'])
+        elements.append(result['ice_enchant'])
+        elements.append(result['lightning_enchant'])
+        print("Testing partial_enchanter...")
+        for element in elements:
+            print(element(target='enemy'))
+        print()
 
-    # 3.memoized_fibonacciを実行
-    print("Testing memoized_fibonacci...")
-    for fi in fibonacci_tests:
-        print(f"case{fi}: {memoized_fibonacci(fi)}")
-    print()
+        # 3.memoized_fibonacciを実行
+        print("Testing memoized_fibonacci...")
+        for fi in fibonacci_tests:
+            print(f"case{fi}: {memoized_fibonacci(fi)}")
+        print()
 
-    # 4.spell_dispatcherを実行
-    result = spell_dispatcher()
+        # 4.spell_dispatcherを実行
+        result = spell_dispatcher()
 
-    print("Testing spell_dispatcher...")
-    print(result({'spell': 5}))
-    print(result(5))
-    print(result('Fire ball'))
-    print(result(['Fire ball', 'Ice age']))
-    print()
+        print("Testing spell_dispatcher...")
+        print(result({'spell': 5}))
+        print(result(5))
+        print(result('Fire ball'))
+        print(result(['Fire ball', 'Ice age']))
+        print()
+    except TypeError as e:
+        print(f"TypeError: {e}")
 
 
 if __name__ == "__main__":

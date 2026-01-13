@@ -64,32 +64,36 @@ def main() -> None:
     print("========higher_magic.py========")
     print()
 
-    # 1.spell_combinerを実行
-    print("Testing spell_combiner...")
-    result = spell_combiner(lambda: "Fireball hits Dragon",
-                            lambda: " Heals Dragon")
-    print(result())
-    print()
+    try:
+        # 1.spell_combinerを実行
+        print("Testing spell_combiner...")
+        result = spell_combiner(lambda: "Fireball hits Dragon",
+                                lambda: " Heals Dragon")
+        print(result())
+        print()
 
-    # 2.power_amplifierを実行
-    print("Testing power_amplifier...")
-    result = power_amplifier(lambda: 3, 3)
-    print(result())
-    print()
+        # 2.power_amplifierを実行
+        print("Testing power_amplifier...")
+        result = power_amplifier(lambda: 3, 3)
+        print(result())
+        print()
 
-    # 3.conditional_casterを実行
-    print("Testing conditional_caster...")
-    result = conditional_caster(lambda target: True
-                                if target != "Dragon" else False,
-                                lambda target: "Fire ball" if target else None)
-    print(result(random.choice(test_targets)))
-    print()
+        # 3.conditional_casterを実行
+        print("Testing conditional_caster...")
+        result = conditional_caster(lambda target: True
+                                    if target != "Dragon" else False,
+                                    lambda target: "Fire ball"
+                                    if target else None)
+        print(result(random.choice(test_targets)))
+        print()
 
-    # 4.spell_sequenceを実行
-    print("Testing spell_sequence...")
-    result = spell_sequence(spells)
-    print(result(random.choice(test_values)))
-    print()
+        # 4.spell_sequenceを実行
+        print("Testing spell_sequence...")
+        result = spell_sequence(spells)
+        print(result(random.choice(test_values)))
+        print()
+    except TypeError as e:
+        print(f"TypeError: {e}")
 
 
 if __name__ == "__main__":
