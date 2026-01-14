@@ -1,99 +1,81 @@
 #!/usr/bin/env python3
 import operator
 import functools
+import time
+from typing import Any
 
 
-def spell_reducer(spells: list[int], operation: str) -> int:
+def spell_timer(func: callable) -> callable:
     """
-    spellsをoperationで指定された方法で一つの値にする
-    add = 足し算
-    multiply = 掛け算
-    max = 最大値
-    min = 最小値
+    funcの実行時間を計測するデコレータ
     """
 
-    op = {'add': operator.add,
-          'multiply': operator.mul,
-          'max': max,
-          'min': min}
+    @functools.wraps(func)
+    def wrapper(*args, **kwards) -> Any:  # .可変長引数の書式はlistとdictのアンパック
+        """
+        funcの実行前後に実行時間の計算処理を増やした関数
+        """
 
-    return functools.reduce(op[operation], spells)
+        print(f"Casting {func.__name__}...")
+        start_time = time.time()
+
+        result = func(*args, **kwards)
+
+        end_time = time.time()
+        print(f"Spell completed in {end_time - start_time:.4f} seconds")
+
+        return result
+
+    return wrapper
 
 
-def partial_enchanter(base_enchantment: callable) -> dict[str, callable]:
+def power_validator(min_power: int) -> callable:
     """
-    base_enchantmentのpowerとelementを固定した新たな関数を作成する
-     ’fire_enchant’, ’ice_enchant’, ’lightning_enchant’の3つを作成し、powerは50で固定
-    """
-
-    if not callable(base_enchantment):
-        raise TypeError("arg must be callable")
-
-    return {'fire_enchant':
-            functools.partial(base_enchantment, power=50, element='fire'),
-            'ice_enchant':
-            functools.partial(base_enchantment, power=50, element='ice'),
-            'lightning_enchant':
-            functools.partial(base_enchantment, power=50, element='lightning')}
-
-
-@functools.lru_cache(maxsize=None)
-def memoized_fibonacci(n: int) -> int:
-    """
-    フィボナッチ数列を返す
-    functools.lru_cacheを使って一度実行したことのある引数はメモリから参照される
+    powerを引数として受け取る関数を受け取り、
+    min_powerでバリデーションできるデコレータを作成する関数を作成する
     """
 
-    if n <= 0:
-        return 0
-    if n == 1:
-        return 1
+    def gen_decorator(func: callable) -> callable:
+        """
+        powerを引数として受け取る関数を受け取り、
+        min_powerでバリデーションできるデコレータを作成する
+        """
 
-    return memoized_fibonacci(n - 1) + memoized_fibonacci(n - 2)
+        @functools.wraps(func)
+        def wrapper(*args, **kwards) -> Any:
+            """
+            受け取るpowerがmin_power以上かどうかバリデーションするラッパー関数
+            """
+
+            current_power = kwards.get('power')
+            if not current_power:
+                current_power = args[0]
+            if current_power is not None and min_power <= current_power:
+                return func(*args, **kwards)
+
+            return "Insufficient power for this spell"
+
+        return wrapper
+
+    return gen_decorator
 
 
-def spell_dispatcher() -> callable:
+def retry_spell(max_attempts: int) -> callable:
     """
-    @functools.singledispatch
-    @spell.register()
-    この二つのデコレータを使ってint, str, list型がきたときの処理を分けて実装する
-    実装された関数を返す
+    ラムダ式関数実行関数
     """
 
-    # .仮に当てはまる型が定義されていなければ、ここで書いた関数が実行される
-    @functools.singledispatch
-    def spell(arg) -> str:
-        """
-        当てはまる型が実装されていない時に実行される
-        """
+class MageGuild:
 
-        return "The spell was chanted."
-
-    @spell.register(int)
-    def _(arg) -> str:
+    @staticmethod
+    def validate_mage_name(name: str) -> bool:
         """
-        int型の場合の処理
+        ラムダ式関数実行関数
         """
-
-        return f"The spell was chanted. Damage: {arg}"
-
-    @spell.register(str)
-    def _(arg) -> str:
+    def cast_spell(self, spell_name: str, power: int) -> str:
         """
-        str型の場合の処理
+        ラムダ式関数実行関数
         """
-
-        return f"The spell was chanted. Spell name: {arg}"
-
-    @spell.register(list)
-    def _(arg) -> str:
-        """
-        list型の場合の処理
-        """
-
-        return f"The spell was chanted. Spell count: {len(arg)}"
-
-    return spell
 
 
 def main() -> None:
@@ -101,47 +83,45 @@ def main() -> None:
     ラムダ式関数実行関数
     """
 
-    spell_powers = [25, 37, 30, 21, 26, 43]
-    operations = ['add', 'multiply', 'max', 'min']
-    fibonacci_tests = [9, 8, 15]
+    test_powers = [19, 18, 21, 11]
+    spell_names = ['shield', 'lightning', 'tornado', 'blizzard']
+    mage_names = ['Alex', 'Ember', 'Zara', 'Luna', 'Nova', 'Jordan']
+    invalid_names = ['Jo', 'A', 'Alex123', 'Test@Name']
 
     print("========functools_artifacts.py========")
     print()
 
     try:
-        # 1.spell_reducerを実行
-        print("Testing spell_reducer...")
-        for op in operations:
-            print(f"{op}: {spell_reducer(spell_powers, op)}")
-        print()
+        # 1.spell_timerを実行
+        print("Testing spell_timer...")
 
-        # 2.partial_enchanterを実行
-        result = partial_enchanter(lambda power, element, target:
-                                   f"{element} -> {target} ({power})")
-        elements = []
-        elements.append(result['fire_enchant'])
-        elements.append(result['ice_enchant'])
-        elements.append(result['lightning_enchant'])
-        print("Testing partial_enchanter...")
-        for element in elements:
-            print(element(target='enemy'))
-        print()
+        @spell_timer
+        def fire_ball() -> str:
+            """
+            火の玉が打てる
+            """
 
-        # 3.memoized_fibonacciを実行
-        print("Testing memoized_fibonacci...")
-        for fi in fibonacci_tests:
-            print(f"case{fi}: {memoized_fibonacci(fi)}")
-        print()
+            time.sleep(0.5)
+            return "Fireball cast!"
 
-        # 4.spell_dispatcherを実行
-        result = spell_dispatcher()
+        result = fire_ball()
+        print(f"Result: {result}")
 
-        print("Testing spell_dispatcher...")
-        print(result({'spell': 5}))
-        print(result(5))
-        print(result('Fire ball'))
-        print(result(['Fire ball', 'Ice age']))
-        print()
+        # 2.power_validataorを実行
+        print("Testing power_validataor...")
+        result = power_validator(20)
+
+        @result
+        def big_fire_ball(power) -> str:
+            """
+            魔力を使って火の玉を打つ
+            """
+
+            return f"({power}) BIG FIRE BALL!!!"
+
+        for p in test_powers:
+            print(f"power({p}): {big_fire_ball(p)}")  # .なぜかpowerにうまく入らないので、引数増やしてテストしましょう
+
     except TypeError as e:
         print(f"TypeError: {e}")
 
