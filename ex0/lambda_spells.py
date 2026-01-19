@@ -61,7 +61,7 @@ def main() -> None:
     print()
 
     try:
-        # 1.aritifact_srterを実行
+        # 1.aritifact_sorterを実行
         print("Testing artifact sorter...")
         print(artifact_sorter(artifacts))
         print()

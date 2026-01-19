@@ -122,7 +122,7 @@ class MageGuild:
 
 def main() -> None:
     """
-    ラムダ式関数実行関数
+    デコレータ作成実行関数
     """
 
     test_powers = [9, 8, 10, 11]
@@ -188,12 +188,12 @@ def main() -> None:
         result = MageGuild()
 
         true_name = random.choice(mage_names)
-        False_name = random.choice(invalid_names)
+        false_name = random.choice(invalid_names)
         spell_name = random.choice(spell_names)
         magic_power = random.choice(test_powers)
 
         print(f"{true_name}: {result.validate_mage_name(true_name)}")
-        print(f"{False_name}: {result.validate_mage_name(False_name)}")
+        print(f"{false_name}: {result.validate_mage_name(false_name)}")
 
         print(f"power({magic_power}): "
               f"{result.cast_spell(spell_name, power=magic_power)}")

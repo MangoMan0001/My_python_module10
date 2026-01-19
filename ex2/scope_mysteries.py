@@ -23,7 +23,7 @@ def mage_counter() -> callable:
 
 def spell_accumulator(initial_power: int) -> callable:
     """
-    初期値を設定後、変数に引数に足す関数を作成して返す
+    初期値を設定後、変数に引数を足す関数を作成して返す
     """
 
     total_power = initial_power

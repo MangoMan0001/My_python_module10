@@ -70,7 +70,7 @@ def spell_dispatcher() -> callable:
         return "The spell was chanted."
 
     @spell.register(int)
-    def _(arg) -> str:
+    def _(arg: int) -> str:
         """
         int型の場合の処理
         """
@@ -78,7 +78,7 @@ def spell_dispatcher() -> callable:
         return f"The spell was chanted. Damage: {arg}"
 
     @spell.register(str)
-    def _(arg) -> str:
+    def _(arg: str) -> str:
         """
         str型の場合の処理
         """
@@ -86,7 +86,7 @@ def spell_dispatcher() -> callable:
         return f"The spell was chanted. Spell name: {arg}"
 
     @spell.register(list)
-    def _(arg) -> str:
+    def _(arg: list) -> str:
         """
         list型の場合の処理
         """

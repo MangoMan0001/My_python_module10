@@ -80,8 +80,7 @@ def main() -> None:
 
         # 3.conditional_casterを実行
         print("Testing conditional_caster...")
-        result = conditional_caster(lambda target: True
-                                    if target != "Dragon" else False,
+        result = conditional_caster(lambda target: target != "Dragon",
                                     lambda target: "Fire ball"
                                     if target else None)
         print(result(random.choice(test_targets)))
